@@ -1,5 +1,10 @@
 * {
     box-sizing: border-box;
-    text-align: center;
+    text-align: left;
     margin: 0px;
+}
+
+.jumbotron {
+    margin-top: 10px;
+    text-align: center;
 }
