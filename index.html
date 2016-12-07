@@ -22,12 +22,24 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="panel panel-default">
+                <div class="panel-default panel">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Current Trains</h3>
+                        <h5 class="panel-title">Current Trains</h5>
                     </div>
-                    <div class="panel-body">
-                        Trains go here...
+                    <div class="panel-body padding-bottom-none">
+                        <div class="col-sm-3 text-left"><b>Train Name</b></div>
+                        <div class="col-sm-3 text-left"><b>Destination</b></div>
+                        <div class="col-sm-2 text-left"><b>Frequency (min)</b></div>
+                        <div class="col-sm-2 text-left"><b>Next Arrival</b></div>
+                        <div class="col-sm-2 text-left"><b>Minutes Away</b></div>
+                        <hr>
+                    </div>
+                    <div class="panel-body padding-top-none">
+                        <div class="col-sm-3 text-left trainName data"></div>
+                        <div class="col-sm-3 text-left destination data"></div>
+                        <div class="col-sm-2 text-left frequency data"></div>
+                        <div class="col-sm-2 text-left nextArrival data"></div>
+                        <div class="col-sm-2 text-left minutesAway data"></div>
                     </div>
                 </div>
             </div>
@@ -41,19 +53,19 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Train Name</label>
-                            <input type="name" class="form-control">
+                            <input type="name" class="form-control" id="train-name">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Destination</label>
-                            <input type="destination" class="form-control">
+                            <input type="destination" class="form-control" id="destination">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputFile">First Train Time (HH:mm - military time)</label>
-                            <input type="train-time" class="form-control">
+                            <input type="train-time" class="form-control" id="first-train">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputFile">Frequency (min)</label>
-                            <input type="frequency" class="form-control">
+                            <input type="frequency" class="form-control" id="frequency">
                         </div>
                         <button type="submit" class="btn btn-default">Submit</button>
                         </form>
@@ -66,6 +78,7 @@
     <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
     <!-- Firebase Reference -->
     <script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.16.0/moment.min.js"></script>
     <script src="assets/javascript/app.js"></script>
 </body>
 
