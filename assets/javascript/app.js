@@ -16,6 +16,8 @@ $(document).ready(function() {
     var currentDate = moment().format("YYYY-MM-DD");
     var currentDateTime = moment().format("YYY-MM-DD HH:mm");
 
+    // Hide alert
+    $('.alert').hide();
 
     // Firebase call that happens on page load and when a child is added.
     database.ref().on("child_added", function(snapshot) {
@@ -77,7 +79,10 @@ $(document).ready(function() {
             $('input').val('');
 
         } else {
-            alert('All fields are required.');
+            $('.alert').show();
+            $('.close').on('click', function() {
+                $('.alert').hide();
+            });
         }
 
         // Don't refresh.
