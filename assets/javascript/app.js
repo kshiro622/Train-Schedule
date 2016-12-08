@@ -13,49 +13,51 @@ $(document).ready(function() {
     var database = firebase.database();
 
     // Initial variables
-    var trainName = '';
-    var destination = '';
-    var firstTrain = '';
-    var frequency = '';
-    var nextArrival = '';
     var currentDate = moment().format("YYYY-MM-DD");
     var currentDateTime = moment().format("YYY-MM-DD HH:mm");
 
-    // Firebase call that happens on page load and value updates.
-    database.ref().on("value", function(snapshot) {
 
-        $('.data').empty();
+    // Firebase call that happens on page load and when a child is added.
+    database.ref().on("child_added", function(snapshot) {
 
-        // Console.log the value of this snapshot
-        console.log(snapshot.val());
-
-        snapshot.forEach(function(childSnapshot) {
-            var trainName = childSnapshot.val().trainName;
-            var destination = childSnapshot.val().destination;
-            var frequency = childSnapshot.val().frequency;
-            var firstTrain = childSnapshot.val().firstTrain;
+            var trainName = snapshot.val().trainName;
+            var destination = snapshot.val().destination;
+            var frequency = snapshot.val().frequency;
+            var firstTrain = snapshot.val().firstTrain;
             var timeSince = moment().diff(firstTrain, 'minutes');
-            var minutesAway = String(parseInt(frequency) - (parseInt(timeSince) % parseInt(frequency)));
-            var nextArrival = moment(currentDateTime).add(minutesAway, "minutes").format("HH:mm");
+            var timeSinceInt = parseInt(timeSince);
+            var minutesAwayPast = String(parseInt(frequency) - (parseInt(timeSince) % parseInt(frequency)));
+            var minutesAwayFuture = Math.abs(timeSince);
+            var nextArrivalPast = moment(currentDateTime).add(minutesAwayPast, "minutes").format("HH:mm");
+            var nextArrivalFuture = moment(firstTrain).format('HH:mm');
             $('.trainName').append('<p>' + trainName + '</p>');
             $('.destination').append('<p>' + destination + '</p>');
             $('.frequency').append('<p>' + frequency + '</p>');
-            $('.nextArrival').append('<p>' + nextArrival + '</p>');
-            $('.minutesAway').append('<p>' + minutesAway + '</p>');
+            if (timeSinceInt > 0) {
+                $('.minutesAway').append('<p>' + minutesAwayPast + '</p>');
+                $('.nextArrival').append('<p>' + nextArrivalPast + '</p>');
+            } else if (timeSinceInt === 0) {
+                $('.minutesAway').append('<p>DUE</p>');
+                $('.nextArrival').append('<p>' + nextArrivalFuture + '</p>');
+            } else {
+                $('.minutesAway').append('<p>' + minutesAwayFuture + '</p>');
+                $('.nextArrival').append('<p>' + nextArrivalFuture + '</p>');
+            }
+
+            // If it fails, cue error handling.
+        },
+        function(errorObject) {
+
+            // Log a read error and its error code.
+            console.log("The read failed: " + errorObject.code);
+
         });
 
-        // If it fails, cue error handling.
-    }, function(errorObject) {
-
-        // Log a read error and its error code.
-        console.log("The read failed: " + errorObject.code);
-
-    });
+    // Add button on click funciton
 
     $('button').on('click', function() {
 
-        // Take the input from each box and store it in a variable.
-        // We'll need to push these variables to firebase and also use them to determine what gets displayed.
+        // Take the input from each box and store it in a variable
 
         var trainName = $('#train-name').val();
         var destination = $('#destination').val();
@@ -81,5 +83,20 @@ $(document).ready(function() {
         // Don't refresh.
         return false;
     });
+
+    // Refresh page every minute
+    var time = new Date().getTime();
+    $(document.body).bind("mousemove keypress", function(e) {
+        time = new Date().getTime();
+    });
+
+    function refresh() {
+        if (new Date().getTime() - time >= 60000)
+            window.location.reload(true);
+        else
+            setTimeout(refresh, 10000);
+    }
+
+    setTimeout(refresh, 10000);
 
 });

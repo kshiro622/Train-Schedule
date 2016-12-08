@@ -4,9 +4,15 @@
     margin: 0px;
 }
 
+body {
+    background: #fafafa;
+}
+
 .jumbotron {
     margin-top: 10px;
     text-align: center;
+    background: #2C70A6;
+    color: white;
 }
 
 .padding-bottom-none {
